@@ -1,0 +1,45 @@
+#lab6_3
+#number of @ in string
+.section .data
+    input:
+        .ascii "Hi @ Welcome @ to CSE @ Dep@T"
+        len_input = . - input
+
+.section .bss
+    count:
+        .long 0
+
+.section .text
+.globl _start
+
+_start:
+    movl $0, %ecx        # Initialize loop counter
+    movl $0, %eax        # Initialize count of '@'
+
+loop:
+    cmpb $0, input(,%ecx,1)   # Check if end of string is reached
+    je end_loop
+
+    cmpb $64, input(,%ecx,1)  # Compare character with '@' ASCII value
+    jne next_char            # If not '@', move to next character
+
+    addl $1, %eax            # If '@' found, increment count
+    jmp next_char            # Move to next character
+
+next_char:
+    addl $1, %ecx            # Move to next character
+    jmp loop
+
+end_loop:
+    # Print the count
+    movl $4, %eax            # sys_write syscall number
+    movl $1, %ebx            # File descriptor for stdout
+    movl %eax, count         # Move count to a register for printing
+    leal (count), %ecx       # Load address of count
+    movl $4, %edx            # Number of bytes to write
+    int $0x80                # Call kernel
+
+exit:
+    movl $1, %eax            # sys_exit syscall number
+    xorl %ebx, %ebx          # Exit status 0
+    int $0x80                # Call kernel

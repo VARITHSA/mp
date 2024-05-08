@@ -1,0 +1,47 @@
+.section .data
+arr:
+         .int 20,3,40,4,23,10 #6
+temp:
+         .int 2
+.section .text
+.globl _start
+_start:
+        movl $0,%edx
+        movl $1,%esi
+        movl $0,%ecx 
+        movl $1,%edi
+loop:
+        movl arr(,%edx,4),%eax
+        movl arr(,%esi,4),%ebx
+        cmpl %eax,%ebx
+        jl loop1
+        addl $1,%edx
+        addl $1,%esi
+        cmpl $5,%edx
+        jne loop
+        subl $1,temp
+        movl $0, %edx
+        movl $1, %esi
+        cmpl $0, temp
+        jne loop
+        movl arr(,%edi,4),%ecx
+        movl $1,%eax
+        movl $0,%ebx
+        int $0x80
+loop1:
+        movl %ebx,arr(,%edx,4)
+        movl %eax,arr(,%esi,4)
+        addl $1,%edx
+        addl $1,%esi
+        cmpl $5, %edx
+        jne loop
+        subl $1, temp
+        movl $0,%edx
+        movl $1,%esi
+        cmpl $0, temp
+        jne loop
+        movl arr(,%edi,4),%ecx
+        movl $1,%eax
+        movl $0,%ebx
+        int $0x80
+         

@@ -1,0 +1,58 @@
+#lab8b
+.section .data
+array: 
+       .int 7,4,3,5,9
+b:
+       .int 0
+small: 
+       .int 0
+.section .bss
+           .lcomm out,20
+.section .text
+.globl _start
+_start:
+        movl $0,%ecx
+        movl $0,%edx
+        movl $0,%esi
+        
+        loop1:
+               movl array(,%ecx,4),%eax
+               loop2:
+                     movl array(,%edx,4),%ebx
+                     addl $1, %edx
+                     cmp %ebx,%eax
+                     jl loop3
+                     cmp $5, %edx
+                     je loop6
+                     jmp loop2
+                loop3:
+                      addl $1,%esi
+                      cmp $5,%edx
+                      je loop4
+                      jmp loop2
+                loop4:
+                      movl %eax, out(,%esi,4)
+                      cmp $5,%ecx
+                      je loop5
+                      addl $1, %ecx
+                      movl $0,%edx
+                      movl $0,%esi
+                      jmp loop1
+                loop5:
+                      addl $1,%ecx
+                      cmp $5,%ecx
+                      je loop7
+                      jne loop1
+                loop6:
+                      movl %eax, out(,%esi,4)
+                      jmp exit
+                loop7:
+                      movl $1, %ecx
+                      movl $0, %eax
+                      movl out(,%ecx,4),%eax
+                      movl %eax,small
+                      jmp exit
+        exit:
+              movl $0,%eax
+              movl $1,%ebx
+              int $0x80      
