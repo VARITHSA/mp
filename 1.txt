@@ -1,0 +1,35 @@
+.section .data
+str1:
+    .ascii "Hello"
+str2:
+    .ascii "Hello"
+
+.section .text
+.global _start
+_start:
+    lea str1, %eax
+    lea str2, %ebx
+
+compare_loop:
+    movb (%eax), %al
+    movb (%ebx), %bl
+    cmpb %al, %bl
+    jne not_equal
+    cmpb $0, %al
+    je equal
+    inc %eax
+    inc %ebx
+    jmp compare_loop
+
+equal:
+    movl $11, %eax
+    jmp exit_prog
+
+not_equal:
+    movl $55, %ebx
+    jmp exit_prog
+
+exit_prog:
+    movl $1, %eax
+    xorl %ebx, %ebx
+    int $0x80

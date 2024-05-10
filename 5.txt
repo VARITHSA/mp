@@ -1,0 +1,31 @@
+section .data
+    a dd 1, 3, 2, 4, 5, 22, 12, 3, 2, 4, 10
+    n equ 5
+
+section .bss
+    fact resd 1
+
+section .text
+    global _start
+
+_start:
+    mov esi, a
+
+    movl [esi + 4 * n * 4], eax
+
+    movl eax, [esi + 4 * n * 4]
+    movl ebx, eax
+    dec ebx
+
+factorial_loop:
+    movl ecx, eax
+    mul ecx
+    movl eax, ecx
+    dec ebx
+    jnz factorial_loop
+
+    movl eax, [esi + 4 * n * 4]
+
+    movl $1, %eax
+    xorl %ebx, %ebx
+    int $0x80

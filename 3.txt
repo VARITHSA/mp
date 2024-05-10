@@ -1,0 +1,21 @@
+section .data
+    array dd 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+
+section .text
+    global _start
+
+_start:
+    mov esi, array
+
+    mov eax, [esi + 4]
+    imul eax, eax
+    mov [esi + 4], eax
+
+    mov eax, [esi + 28]
+    imul eax, eax
+    imul eax, [esi + 28]
+    mov [esi + 28], eax
+
+    mov eax, 1
+    mov ebx, 0
+    int 0x80

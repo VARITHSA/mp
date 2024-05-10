@@ -1,0 +1,38 @@
+section .data
+    array dd 12, 18
+
+section .bss
+    gcd resd 1
+    lcm resd 1
+
+section .text
+    global _start
+
+_start:
+    mov esi, array
+    movl (%esi), eax
+    movl 4(%esi), ebx
+
+    movl eax, ecx
+    movl ebx, edx
+    call euclid_gcd
+    movl eax, [gcd]
+
+    movl ecx, eax
+    mul ebx
+    div ecx
+    movl eax, [lcm]
+
+    movl $1, %eax
+    movl $0, %ebx
+    int $0x80
+
+euclid_gcd:
+    cmp ecx, 0
+    je gcd_end
+    div ecx
+    xchg eax, ecx
+    jmp euclid_gcd
+
+gcd_end:
+    ret

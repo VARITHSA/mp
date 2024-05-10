@@ -1,0 +1,39 @@
+section .data
+    A dd 15, 10, 5, 4, 6, 8, 4, 9, 7, 4, 3
+    E dd 5
+
+section .bss
+    a resd 1
+    b resd 1
+    c resd 1
+    d resd 1
+    f resd 1
+
+section .text
+    global _start
+
+_start:
+    mov esi, A
+
+    mov eax, [esi + 12]
+    movl eax, [a]
+
+    mov eax, [esi + 20]
+    movl eax, [b]
+
+    mov eax, [esi + 28]
+    movl eax, [c]
+
+    mov eax, [a]
+    or eax, [b]
+    mov ebx, [c]
+    xor eax, ebx
+    movl eax, [d]
+
+    mov eax, [d]
+    imul dword [E]
+    movl eax, [f]
+
+    mov eax, 1
+    xor ebx, ebx
+    int 0x80
